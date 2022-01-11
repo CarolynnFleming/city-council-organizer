@@ -17,6 +17,14 @@ export async function createMember(member) {
     return checkError(response);
 }
 
+export async function deleteMember(memberId) {
+    const response = await client 
+        .from('city_council_member')
+        .delete()
+        .match({ id: memberId })
+        .single;
+    return checkError(response);
+}
 
 
 export async function getUser() {
