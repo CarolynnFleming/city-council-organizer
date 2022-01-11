@@ -6,9 +6,18 @@ const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 export async function getCityCouncilOrganizers() {
     const response = await client
         .from('city_council_organizer')
-        .select(`*, city_council_members`);
+        .select(`*, city_council_members (*)`);
     return checkError(response);
 }
+
+export async function createMember(member) {
+    const response = await client
+        .from('city_council_members')
+        .insert(member);
+    return checkError(response);
+}
+
+
 
 export async function getUser() {
     return client.auth.session();
