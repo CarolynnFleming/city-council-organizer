@@ -1,5 +1,5 @@
-import { checkAuth, getCityCouncilOrganizers, logout, deleteMember } from '../fetch-utils.js';
-import { renderMember } from '../render-utils.js';
+import { checkAuth, getEvents, logout, deleteParticipant } from '../fetch-utils.js';
+import { renderParticipant } from '../render-utils.js';
 checkAuth();
 
 const logoutButton = document.getElementById('logout');
@@ -11,28 +11,28 @@ logoutButton.addEventListener('click', () => {
 const eventsListEl = document.querySelector('.events-list');
 
 async function displayEvents(){
-    const events = await getCityCouncilOrganizers();
+    const events = await getEvents();
 
     eventsListEl.textContent = '';
 
     for (let event of events) {
         const eventEl = document.createElement('div');
         const nameEl = document.createElement('h3');
-        const membersEl = document.createElement('div');
+        const participantsEl = document.createElement('div');
 
         eventEl.classList.add('event');
         nameEl.textContent = event.name;
 
-        eventEl.append(nameEl, membersEl);
+        eventEl.append(nameEl, participantsEl);
 
-        for (let member of event.city_council_member) {
-            const memberEl = renderMember(member);
+        for (let participant of event.event_participants) {
+            const participantEl = renderParticipant(participant);
 
-            memberEl.addEventListener('click', async() => {
-                await deleteMember(member.id);
+            participantEl.addEventListener('click', async() => {
+                await deleteParticipant(participant.id);
                 displayEvents();
             });
-            membersEl.append(memberEl);
+            participantEl.append(participantEl);
         }
         eventsListEl.append(eventEl);
     }
