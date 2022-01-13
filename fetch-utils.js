@@ -22,7 +22,7 @@ export async function deleteParticipant(participantId) {
         .from('event_participants')
         .delete()
         .match({ id: participantId })
-        .single;
+        .single();
     return checkError(response);
 }
 

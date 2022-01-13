@@ -1,5 +1,5 @@
 import { checkAuth, getEvents, logout, deleteParticipant } from '../fetch-utils.js';
-import { renderParticipant } from '../render-utils.js';
+//import { renderParticipant } from './render-utils.js';
 checkAuth();
 
 const logoutButton = document.getElementById('logout');
@@ -26,13 +26,16 @@ async function displayEvents(){
         eventEl.append(nameEl, participantsEl);
 
         for (let participant of event.event_participants) {
-            const participantEl = renderParticipant(participant);
+            const participantEl = document.createElement('p');
+
+            participantEl.classList.add('participant');
 
             participantEl.addEventListener('click', async() => {
                 await deleteParticipant(participant.id);
                 displayEvents();
             });
-            participantEl.append(participantEl);
+            participantEl.textContent = `${participant.name} : ${participant.contact}`;
+            participantsEl.append(participantEl);
         }
         eventsListEl.append(eventEl);
     }
@@ -40,6 +43,5 @@ async function displayEvents(){
 }
 
 window.addEventListener('load', async() => {
-
     displayEvents();
 });
