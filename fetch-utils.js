@@ -3,25 +3,25 @@ const SUPABASE_URL = 'https://igyvpimxugpyxqzzyuep.supabase.co';
 
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-export async function getCityCouncilOrganizers() {
+export async function getEvents() {
     const response = await client
-        .from('city_council_organizer')
-        .select(`*, city_council_members (*)`);
+        .from('events')
+        .select(`*, event_participants (*)`);
     return checkError(response);
 }
 
-export async function createMember(member) {
+export async function createParticipant(participant) {
     const response = await client
-        .from('city_council_members')
-        .insert(member);
+        .from('event_participants')
+        .insert(participant);
     return checkError(response);
 }
 
-export async function deleteMember(memberId) {
+export async function deleteParticipant(participantId) {
     const response = await client 
-        .from('city_council_member')
+        .from('event_participants')
         .delete()
-        .match({ id: memberId })
+        .match({ id: participantId })
         .single;
     return checkError(response);
 }
@@ -40,7 +40,7 @@ export async function checkAuth() {
 
 export async function redirectIfLoggedIn() {
     if (await getUser()) {
-        location.replace('./organizer');
+        location.replace('./events');
     }
 }
 
